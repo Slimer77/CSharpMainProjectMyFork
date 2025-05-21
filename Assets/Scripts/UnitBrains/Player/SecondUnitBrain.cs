@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Model;
 using Model.Runtime.Projectiles;
 using UnityEngine;
@@ -15,6 +16,19 @@ namespace UnitBrains.Player
         private float _cooldownTime = 0f;
         private bool _overheated;
         private List<Vector2Int> dangerTargets = new List<Vector2Int>();
+
+        private static int _counter = 0;
+        private int UnitNumber;
+        const int MAXnumberOfTargets = 3;
+
+        public SecondUnitBrain()
+        {
+
+            UnitNumber = _counter;
+            _counter++;
+            Debug.Log("Unit number " + UnitNumber);
+        }
+
 
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
@@ -55,39 +69,19 @@ namespace UnitBrains.Player
             // Homework 1.4 (1st block, 4rd module)
             ///////////////////////////////////////
             var result = new List<Vector2Int>();
-            var targets = GetAllTargets();
+            var targets = GetAllTargets().ToList();
             dangerTargets.Clear();
 
 
             var closestTarget = new Vector2Int();
             var minDistance = float.MaxValue;
 
-            foreach (var target in targets)
+            if (targets.Count == 0)
             {
-                float distance = DistanceToOwnBase(target);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestTarget = target;
-                }
+                var enemyBase = runtimeModel.RoMap.Bases[
+                    IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId
+                ];
 
-            }
-
-            if (minDistance < float.MaxValue)
-            {
-                if (IsTargetInRange(closestTarget))
-                {
-                    result.Add(closestTarget);
-                }
-                else
-                {
-                    dangerTargets.Add(closestTarget);
-                }
-            }
-
-            if (result.Count == 0)
-            {
-                var enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.PlayerId : RuntimeModel.BotPlayerId];
                 if (IsTargetInRange(enemyBase))
                 {
                     result.Add(enemyBase);
@@ -96,11 +90,34 @@ namespace UnitBrains.Player
                 {
                     dangerTargets.Add(enemyBase);
                 }
+
+                return result;
             }
 
+            // Сортируем цели по расстоянию до своей базы
+            SortByDistanceToOwnBase(targets);
+
+            // Вычисляем индекс цели, которую должен атаковать этот юнит
+            int targetIndex = UnitNumber % MAXnumberOfTargets;
+
+            // Если целей меньше, чем индекс — атакуем ближайшую
+            if (targetIndex >= targets.Count)
+            {
+                targetIndex = 0;
+            }
+
+            Vector2Int chosenTarget = targets[targetIndex];
+
+            if (IsTargetInRange(chosenTarget))
+            {
+                result.Add(chosenTarget);
+            }
+            else
+            {
+                dangerTargets.Add(chosenTarget);
+            }
 
             return result;
-            ///////////////////////////////////////
         }
 
         public override void Update(float deltaTime, float time)
