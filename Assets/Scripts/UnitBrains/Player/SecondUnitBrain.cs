@@ -94,13 +94,13 @@ namespace UnitBrains.Player
                 return result;
             }
 
-            // Сортируем цели по расстоянию до своей базы
+            
             SortByDistanceToOwnBase(targets);
 
-            // Вычисляем индекс цели, которую должен атаковать этот юнит
+            
             int targetIndex = UnitNumber % MAXnumberOfTargets;
 
-            // Если целей меньше, чем индекс — атакуем ближайшую
+            
             if (targetIndex >= targets.Count)
             {
                 targetIndex = 0;
