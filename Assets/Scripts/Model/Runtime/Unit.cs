@@ -16,7 +16,16 @@ namespace Model.Runtime
         public Vector2Int Pos { get; private set; }
         public int Health { get; private set; }
         public bool IsDead => Health <= 0;
-        public BaseUnitPath ActivePath => _brain?.ActivePath;
+        public BaseUnitPath ActivePath
+        {
+            get 
+            {
+                Debug.Log(_brain != null);
+                Debug.Log(_brain?.ActivePath != null);
+
+                return _brain?.ActivePath;
+            }
+        }
         public IReadOnlyList<BaseProjectile> PendingProjectiles => _pendingProjectiles;
 
         private readonly List<BaseProjectile> _pendingProjectiles = new();

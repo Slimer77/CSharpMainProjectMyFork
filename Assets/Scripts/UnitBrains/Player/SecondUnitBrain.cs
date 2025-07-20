@@ -56,6 +56,7 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
+            base.GetNextStep();
             if (dangerTargets.Count == 0)
             {
                 return unit.Pos;

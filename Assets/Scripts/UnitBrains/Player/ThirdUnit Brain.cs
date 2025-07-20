@@ -6,7 +6,7 @@ using UnityEngine;
 public class ThirdUnitBrain : DefaultPlayerUnitBrain
 {
     public override string TargetUnitName => "Ironclad Behemoth";
-    private float _changeStateTime = 1f;
+    private float _changeStateTime = 0.4f;
     private float _currentStateTime = 0f;
     private bool _isChanging = false;
     private enum UnitState
