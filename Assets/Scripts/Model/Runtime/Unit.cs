@@ -4,6 +4,7 @@ using Model.Config;
 using Model.Runtime.Projectiles;
 using Model.Runtime.ReadOnly;
 using UnitBrains;
+using UnitBrains.Coordinator;
 using UnitBrains.Pathfinding;
 using UnityEngine;
 using Utilities;
@@ -31,18 +32,22 @@ namespace Model.Runtime
         private readonly List<BaseProjectile> _pendingProjectiles = new();
         private IReadOnlyRuntimeModel _runtimeModel;
         private BaseUnitBrain _brain;
+        private UnitCoordinator _coordinator;
+        public BaseUnitBrain Brain => _brain;
 
         private float _nextBrainUpdateTime = 0f;
         private float _nextMoveTime = 0f;
         private float _nextAttackTime = 0f;
         
-        public Unit(UnitConfig config, Vector2Int startPos)
+        public Unit(UnitConfig config, Vector2Int startPos, UnitCoordinator coordinator)
         {
+            _coordinator = coordinator;
             Config = config;
             Pos = startPos;
             Health = config.MaxHealth;
             _brain = UnitBrainProvider.GetBrain(config);
             _brain.SetUnit(this);
+            _brain.SetCoordinator(coordinator);
             _runtimeModel = ServiceLocator.Get<IReadOnlyRuntimeModel>();
         }
 

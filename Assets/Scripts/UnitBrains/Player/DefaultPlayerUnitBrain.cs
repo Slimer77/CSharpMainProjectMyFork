@@ -25,7 +25,7 @@ namespace UnitBrains.Player
 
         protected override List<Vector2Int> SelectTargets()
         {
-            var coordinator = UnitCoordinator.Instance;
+            var coordinator = _coordinator;
 
             if (coordinator.RecommendedTarget.HasValue &&
                 IsWithinDoubleAttackRange(coordinator.RecommendedTarget.Value))
@@ -48,7 +48,7 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
-            var coordinator = UnitCoordinator.Instance;
+            var coordinator = _coordinator;
             if (coordinator.RecommendedPoint.HasValue)
                 return coordinator.RecommendedPoint.Value;
 

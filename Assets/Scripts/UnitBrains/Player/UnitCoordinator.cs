@@ -8,23 +8,26 @@ namespace UnitBrains.Coordinator
 {
     public class UnitCoordinator
     {
-        private static UnitCoordinator _instance;
-        public static UnitCoordinator Instance => _instance ??= new UnitCoordinator();
+        //private static UnitCoordinator _instance;
+        //public static UnitCoordinator Instance => _instance ??= new UnitCoordinator();
 
         private IReadOnlyRuntimeModel _runtimeModel;
 
         public Vector2Int? RecommendedTarget { get; private set; }
         public Vector2Int? RecommendedPoint { get; private set; }
 
-        private UnitCoordinator() { }
-
-        public void Init(IReadOnlyRuntimeModel model, TimeUtil timeUtil)
+        public UnitCoordinator(IReadOnlyRuntimeModel model) 
         {
-            if (_runtimeModel != null) return;
-
             _runtimeModel = model;
-            timeUtil.AddFixedUpdateAction(OnFixedUpdate);
         }
+
+        //public void Init(IReadOnlyRuntimeModel model, TimeUtil timeUtil)
+        //{
+        //    if (_runtimeModel != null) return;
+
+        //    _runtimeModel = model;
+        //    timeUtil.AddFixedUpdateAction(OnFixedUpdate);
+        //}
 
         private void OnFixedUpdate(float dt)
         {

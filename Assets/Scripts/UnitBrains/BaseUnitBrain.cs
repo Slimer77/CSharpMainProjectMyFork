@@ -3,6 +3,7 @@ using System.Linq;
 using Model;
 using Model.Runtime.Projectiles;
 using Model.Runtime.ReadOnly;
+using UnitBrains.Coordinator;
 using UnitBrains.Pathfinding;
 using UnityEngine;
 using Utilities;
@@ -20,6 +21,13 @@ namespace UnitBrains
         protected Unit unit { get; private set; }
         protected IReadOnlyRuntimeModel runtimeModel => ServiceLocator.Get<IReadOnlyRuntimeModel>();
         private BaseUnitPath _activePath;
+
+        protected UnitCoordinator _coordinator;
+
+        public virtual void SetCoordinator(UnitCoordinator coordinator)
+        {
+            _coordinator = coordinator;
+        }
         
         private readonly Vector2[] _projectileShifts = new Vector2[]
         {
